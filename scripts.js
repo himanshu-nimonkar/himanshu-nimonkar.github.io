@@ -37,6 +37,17 @@ themeToggle.addEventListener('click', () => {
 // Animate elements on scroll
 // Animate elements on scroll + staggered list items
 function animateOnScroll() {
+  // Mobile fallback: reveal everything immediately
+  if (window.innerWidth <= 768) {
+    document.querySelectorAll('.section').forEach(s => s.classList.add('section-visible'));
+    document.querySelectorAll('.timeline-item').forEach(i => i.classList.add('timeline-item-visible'));
+    document.querySelectorAll('.publication-item').forEach(i => i.classList.add('publication-item-visible'));
+    document.querySelectorAll('.project-item').forEach(i => i.classList.add('project-item-visible'));
+    document.querySelectorAll('.languages-list li, .hobbies-list li, .courses-list li')
+      .forEach(i => i.classList.add('list-item-visible'));
+    return;
+  }
+
   const sections = document.querySelectorAll('.section');
   const animationOptions = {
     threshold: 0.1,
@@ -52,34 +63,28 @@ function animateOnScroll() {
 
       // 2) Stagger timeline items
       if (entry.target.querySelector('.timeline')) {
-        const items = entry.target.querySelectorAll('.timeline-item');
-        items.forEach((item, i) => {
-          setTimeout(() => item.classList.add('timeline-item-visible'), 150 * i);
-        });
+        entry.target.querySelectorAll('.timeline-item')
+          .forEach((item, i) => setTimeout(() => item.classList.add('timeline-item-visible'), 150 * i));
       }
 
-      // 3) Stagger publication/project items
+      // 3) Stagger publication items
       if (entry.target.querySelector('.publications-list')) {
-        const items = entry.target.querySelectorAll('.publication-item');
-        items.forEach((item, i) => {
-          setTimeout(() => item.classList.add('publication-item-visible'), 150 * i);
-        });
-      }
-      if (entry.target.querySelector('.projects-grid')) {
-        const items = entry.target.querySelectorAll('.project-item');
-        items.forEach((item, i) => {
-          setTimeout(() => item.classList.add('project-item-visible'), 150 * i);
-        });
+        entry.target.querySelectorAll('.publication-item')
+          .forEach((item, i) => setTimeout(() => item.classList.add('publication-item-visible'), 150 * i));
       }
 
-      // 4) **NEW**: Stagger list items in Languages, Hobbies, and Courses
-      const lists = entry.target.querySelectorAll('.languages-list, .hobbies-list, .courses-list');
-      lists.forEach(list => {
-        const items = list.querySelectorAll('li');
-        items.forEach((item, i) => {
-          setTimeout(() => item.classList.add('list-item-visible'), 100 * i);
+      // 4) Stagger project items
+      if (entry.target.querySelector('.projects-grid')) {
+        entry.target.querySelectorAll('.project-item')
+          .forEach((item, i) => setTimeout(() => item.classList.add('project-item-visible'), 150 * i));
+      }
+
+      // 5) Stagger list items in Languages, Hobbies, Courses
+      entry.target.querySelectorAll('.languages-list, .hobbies-list, .courses-list')
+        .forEach(list => {
+          list.querySelectorAll('li')
+            .forEach((item, i) => setTimeout(() => item.classList.add('list-item-visible'), 100 * i));
         });
-      });
     });
   }, animationOptions);
 
